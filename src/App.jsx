@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react'
 import './App.css'
 
 function App() {
-  const [country, setCountry] = useState('DE');
+  const [country, setCountry] = useState('NL');
   const [holidaysData, setHolidaysData] = useState([]);
   const [options, setOptions] = useState([]);
 
@@ -25,11 +25,15 @@ function App() {
             })
     },[]);
 
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const format = { month: 'long', day: 'numeric'};
+        return date.toLocaleDateString('en-US', format);
+    }
 
   return (
     <>
       <div className="dropdown">
-          <label htmlFor="country-select">Select Country:</label>
           <select
               id="country-select"
               value={country}
@@ -41,10 +45,11 @@ function App() {
               ))}
           </select>
       </div>
-      <ul>
+      <ul style={{ listStyleType: 'none', padding: 0, margin: 0, textAlign: "left" }}>
           {holidaysData.map((item) => {
               const enName = item.name.find((n) => n.language === 'EN');
-              return <li key={item.id}>{item.startDate} - {enName.text}</li>;
+              const formattedDate = formatDate(item.startDate);
+              return <li key={item.id}>{formattedDate} - {enName.text}</li>;
           })}
       </ul>
     </>
